@@ -32,4 +32,29 @@ parameters:
     type: string
     default: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
 
+resources:
 
+  ansible_tower:
+    type: "Rackspace::Cloud::Server"
+    properties:
+      flavor: { get_param: flavor }
+      image: Ubuntu 12.04 LTS (Precise Pangolin)
+      name: { get_param: server_name }
+      key_name: { get_param: key_name }
+      user_data:
+        template: |
+          #!/bin/bash
+          pip install ansible
+          wget -ct0 %ansible_tower_tarball%
+          tar xzvf ansible-tower-setup-latest.tar.gz
+        params:
+          "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
+
+outputs:
+
+  public_ip:
+    value: { get_attr: [ ansible_tower, accessIPv4 ] }
+    description: The public IP address of the server
+
+  private_ip:
+    value: { get_attr: [ ansible_tower, privateIPv4 ] }
