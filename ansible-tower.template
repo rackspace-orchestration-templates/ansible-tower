@@ -44,12 +44,12 @@ parameters:
     description: Ansible admin password
     type: string
     constraints:
-    - length
+    - length:
         min: 1
-        max: 21
-      description: must be between 1 and 21 characters
+        max: 41
+      description: must be between 1 and 41 characters
     - allowed_pattern: "[a-zA-Z0-9]*"
-      description: must contain only alphanumeric characters
+      description : must contain only alphanumeric characters.
 
   postgres_admin_pass:
     default: AWsecret
@@ -57,12 +57,12 @@ parameters:
     description: Postgres admin password
     type: string
     constraints:
-    - length
+    - length:
         min: 1
-        max: 21
-      description: must be between 1 and 21 characters
+        max: 41
+      description: must be between 1 and 41 characters
     - allowed_pattern: "[a-zA-Z0-9]*"
-      description: must contain only alphanumeric characters
+      description : must contain only alphanumeric characters.
 
   rabbitmq_admin_pass:
     default: AWXbunnies
@@ -70,12 +70,12 @@ parameters:
     description: Postgres admin password
     type: string
     constraints:
-    - length
+    - length:
         min: 1
-        max: 21
-      description: must be between 1 and 21 characters
+        max: 41
+      description: must be between 1 and 41 characters
     - allowed_pattern: "[a-zA-Z0-9]*"
-      description: must contain only alphanumeric characters
+      description : must contain only alphanumeric characters.
 
 resources:
 
