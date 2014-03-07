@@ -98,7 +98,12 @@ resources:
           curl -0 %ansible_tower_tarball% | tar -xz -C /tmp
 
           # Modify groupvars
-          sed 
+          sed -i "s/pg_password: AWsecret/pg_password: %postgres_admin_pass%/" /tmp/%ansible_release_folder%/group_vars/all
+          sed -i "s/admin_password: password/admin_password: %ansible_admin_pass%/" /tmp/%ansible_release_folder%/group_vars/all
+          sed -i 's/rabbitmq_password: "AWXbunnies"/rabbitmq_password: "%rabbitmq_admin_pass%/"' /tmp/%ansible_release_folder%/group_vars/all
+          sed -i 's/httpd_server_name: localhost/httpd_server_name: %server_name%/" /tmp/%ansible_release_folder%/group_vars/all
+          sed -i 's/ - localhost/ - %server_name%/" /tmp/%ansible_release_folder%/group_vars/all
+          sed -i 's/ - 127.0.0.1/ - %accessIPv4%/" /tmp/%ansible_release_folder%/group_vars/all
 
           # Copy everything to working directory and install
           cp -r /tmp/%ansible_release_folder%/* .
@@ -109,6 +114,8 @@ resources:
           "%ansible_admin_pass%": { get_param: ansible_admin_pass }
           "%postgres_admin_pass%": { get_param: postgres_admin_pass }
           "%rabbitmq_admin_pass%": { get_param: rabbitmq_admin_pass }
+          "%server_name%": { get_param: server_name }
+          "%accessIPv4%": { get_attr: [ ansible_tower, accessIPv4 ] }
 
 outputs:
 
