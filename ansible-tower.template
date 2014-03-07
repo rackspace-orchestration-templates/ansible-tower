@@ -82,10 +82,10 @@ resources:
   ansible_tower:
     type: "Rackspace::Cloud::Server"
     properties:
+      key_name: { get_param: key_name }
       flavor: { get_param: flavor }
       image: Ubuntu 12.04 LTS (Precise Pangolin)
       name: { get_param: server_name }
-      key_name: { get_param: key_name }
       user_data:
         str_replace:
           template: |
