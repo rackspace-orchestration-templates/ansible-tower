@@ -33,6 +33,11 @@ parameters:
     type: string
     default: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
 
+  ansible_release_folder:
+    description: Folder name that is extracted from the installer
+    type: string
+    default: ansible-tower-setup-1.4.5
+
 resources:
 
   ansible_tower:
@@ -45,12 +50,14 @@ resources:
       user_data:
         template: |
           #!/bin/bash -v
-          apt-get install python-pip -y
+          apt-get install python-pip curl -y
           pip install ansible
-          wget -ct0 %ansible_tower_tarball%
+          curl -0 %ansible_tower_tarball% | tar -xz -C /tmp
           tar xzvf ansible-tower-setup-latest.tar.gz
+          bash /tmp/%ansible_release_folder%/setup.sh
         params:
           "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
+          "%ansible_release_folder%": { get_param: ansible_release_folder }
 
 outputs:
 
