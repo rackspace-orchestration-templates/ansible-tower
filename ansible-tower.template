@@ -38,6 +38,45 @@ parameters:
     type: string
     default: ansible-tower-setup-1.4.5
 
+  ansible_admin_pass:
+    default: password
+    hidden: true
+    description: Ansible admin password
+    type: string
+    constraints:
+    - length
+        min: 1
+        max: 21
+      description: must be between 1 and 21 characters
+    - allowed_pattern: "[a-zA-Z0-9]*"
+      description: must contain only alphanumeric characters
+
+  postgres_admin_pass:
+    default: AWsecret
+    hidden: true
+    description: Postgres admin password
+    type: string
+    constraints:
+    - length
+        min: 1
+        max: 21
+      description: must be between 1 and 21 characters
+    - allowed_pattern: "[a-zA-Z0-9]*"
+      description: must contain only alphanumeric characters
+
+  rabbitmq_admin_pass:
+    default: AWXbunnies
+    hidden: true
+    description: Postgres admin password
+    type: string
+    constraints:
+    - length
+        min: 1
+        max: 21
+      description: must be between 1 and 21 characters
+    - allowed_pattern: "[a-zA-Z0-9]*"
+      description: must contain only alphanumeric characters
+
 resources:
 
   ansible_tower:
@@ -50,14 +89,26 @@ resources:
       user_data:
         template: |
           #!/bin/bash -v
+
+          # Install dependencies
           apt-get install python-pip curl -y
           pip install ansible
+
+          # Pull installer
           curl -0 %ansible_tower_tarball% | tar -xz -C /tmp
-          tar xzvf ansible-tower-setup-latest.tar.gz
+
+          # Modify groupvars
+          sed 
+
+          # Copy everything to working directory and install
+          cp -r /tmp/%ansible_release_folder%/* .
           bash /tmp/%ansible_release_folder%/setup.sh
         params:
           "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
           "%ansible_release_folder%": { get_param: ansible_release_folder }
+          "%ansible_admin_pass%": { get_param: ansible_admin_pass }
+          "%postgres_admin_pass%": { get_param: postgres_admin_pass }
+          "%rabbitmq_admin_pass%": { get_param: rabbitmq_admin_pass }
 
 outputs:
 
