@@ -11,6 +11,7 @@ parameters:
     default: 1GB Standard Instance
     constraints:
       - allowed_values:
+        - 1GB Standard Instance
         - 2GB Standard Instance
         - 4GB Standard Instance
         - 8GB Standard Instance
@@ -43,7 +44,8 @@ resources:
       key_name: { get_param: key_name }
       user_data:
         template: |
-          #!/bin/bash
+          #!/bin/bash -v
+          apt-get install python-pip -y
           pip install ansible
           wget -ct0 %ansible_tower_tarball%
           tar xzvf ansible-tower-setup-latest.tar.gz
