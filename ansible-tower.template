@@ -115,7 +115,7 @@ resources:
           "%postgres_admin_pass%": { get_param: postgres_admin_pass }
           "%rabbitmq_admin_pass%": { get_param: rabbitmq_admin_pass }
           "%server_name%": { get_param: server_name }
-          "%accessIPv4%": { get_attr: [ ansible_tower, accessIPv4 ] }
+          "%accessIPv4%": { get_attr: [ ansibletower, accessIPv4 ] }
 
 outputs:
 
