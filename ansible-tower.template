@@ -79,7 +79,7 @@ parameters:
 
 resources:
 
-  ansibletower:
+  ansible_tower:
     type: "Rackspace::Cloud::Server"
     properties:
       flavor: { get_param: flavor }
@@ -116,9 +116,9 @@ resources:
 outputs:
 
   public_ip:
-    value: { get_attr: [ ansibletower, accessIPv4 ] }
+    value: { get_attr: [ ansible_tower, accessIPv4 ] }
     description: The public IP address of the server
 
   private_ip:
-    value: { get_attr: [ ansibletower, privateIPv4 ] }
+    value: { get_attr: [ ansible_tower, privateIPv4 ] }
     description: The private IP address of the server
