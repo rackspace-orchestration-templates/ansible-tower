@@ -91,7 +91,7 @@ resources:
           template: |
             #!/bin/bash -v
             # Install dependencies
-            apt-get install python-pip curl -y
+            apt-get install python-pip wget -y
             pip install ansible
             # Pull and extract the installer
             wget -ct0 %ansible_tower_tarball%
