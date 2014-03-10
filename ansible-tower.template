@@ -99,9 +99,9 @@ resources:
             # Modify groupvars
             sed -i "s/pg_password: AWsecret/pg_password: %postgres_admin_pass%/" %ansible_release_folder%/group_vars/all
             sed -i "s/admin_password: password/admin_password: %ansible_admin_pass%/" %ansible_release_folder%/group_vars/all
-            sed -i 's/rabbitmq_password: "AWXbunnies"/rabbitmq_password: "%rabbitmq_admin_pass%/"' %ansible_release_folder%/group_vars/all
-            sed -i 's/httpd_server_name: localhost/httpd_server_name: %server_name%/" %ansible_release_folder%/group_vars/all
-            sed -i 's/ - localhost/ - %server_name%/" %ansible_release_folder%/group_vars/all
+            sed -i "s/rabbitmq_password: \"AWXbunnies\"/rabbitmq_password: \"%rabbitmq_admin_pass%/\"" %ansible_release_folder%/group_vars/all
+            sed -i "s/httpd_server_name: localhost/httpd_server_name: %server_name%/" %ansible_release_folder%/group_vars/all
+            sed -i "s/ - localhost/ - %server_name%/" %ansible_release_folder%/group_vars/all
             # Copy everything to working directory and install
             cd %ansible_release_folder%
             ./setup.sh
