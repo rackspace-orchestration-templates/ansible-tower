@@ -1,7 +1,7 @@
 ansible-tower.template
 ======================
 This template will deploy the latest version of [Ansible
-Tower](http://www.ansible.com/tower)
+Tower](http://www.ansible.com/tower).
 
 Requirements
 ============
@@ -75,8 +75,29 @@ For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
 can be done within a file using `%s/\\n/\r/g`.
 
+Stack Details
+=============
+This installs on a Ubuntu 12.04 server using the installer provided by
+Ansible.
+
 Contributing
 ============
 There are substantial changes still happening within the [OpenStack
 Heat](https://wiki.openstack.org/wiki/Heat) project. Template contribution
 guidelines will be drafted in the near future.
+
+License
+=======
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
