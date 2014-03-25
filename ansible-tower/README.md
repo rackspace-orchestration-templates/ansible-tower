@@ -56,10 +56,7 @@ the `-P` flag to specify a custom parameter.
 * `ansible_tower_tarball`: Location of the Ansible Tower installer. (Default:
   Latest release from Ansible.)
 * `ansible_release_folder`: Folder name that is extracted from the installer.
-  (Default: ansible-tower-setup-1.4.5)
-* `ansible_admin_pass`: Ansible admin password. (Default: password)
-* `postgres_admin_pass`: Postgres admin password. (Default: AWsecret)
-* `rabbitmq_admin_pass`: Postgres admin password. (Default: AWXbunnies)
+  (Default: ansible-tower-setup)
 
 Outputs
 =======
@@ -70,6 +67,8 @@ Use `heat output-show <OUTPUT NAME>` to get the value fo a specific output.
 * `private_ip`: The private IP address of the server.
 * `ansible_username`: Username for logging into Tower (will always be `admin`)
 * `ansible_url`: URL to use when accessing Ansible Tower
+* `postgres_admin_password`: Admin password for the installed Postgres instance
+* `rabbitmq_admin_password`: Admin password for the RabbitMQ installation
 
 For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
