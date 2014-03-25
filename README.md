@@ -1,4 +1,4 @@
-ansible-tower.template
+ansible-tower
 ======================
 This template will deploy the latest version of [Ansible
 Tower](http://www.ansible.com/tower).
