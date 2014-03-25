@@ -27,7 +27,7 @@ Here is an example of how to deploy this template using the
 ```
 heat --os-username <OS-USERNAME> --os-password <OS-PASSWORD> --os-tenant-id \
 <TENANT-ID> --os-auth-url https://identity.api.rackspacecloud.com/v2.0/ \
-stack-create Ansible-Tower -f ansible-tower.template \
+stack-create Ansible-Tower -f ansible-tower.yaml \
 -P server_name=ansible-tower -P ssh_keypair_name=ansible-key
 ```
 
