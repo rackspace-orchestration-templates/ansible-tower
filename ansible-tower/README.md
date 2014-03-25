@@ -55,8 +55,8 @@ the `-P` flag to specify a custom parameter.
   (Default: none)
 * `ansible_tower_tarball`: Location of the Ansible Tower installer. (Default:
   Latest release from Ansible.)
-* `ansible_release_folder`: Folder name that is extracted from the installer.
-  (Default: ansible-tower-setup)
+
+All passwords necessary for the Tower installation are randomly generated.
 
 Outputs
 =======
