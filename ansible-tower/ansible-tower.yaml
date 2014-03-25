@@ -8,9 +8,15 @@ parameters:
   flavor:
     description: Rackspace Cloud Server flavor
     type: string
-    default: 1GB Standard Instance
+    default: 1 GB Performance
     constraints:
       - allowed_values:
+        - 1 GB Performance
+        - 2 GB Performance
+        - 4 GB Performance
+        - 8 GB Performance
+        - 15 GB Performance
+        - 30 GB Performance
         - 1GB Standard Instance
         - 2GB Standard Instance
         - 4GB Standard Instance
@@ -24,14 +30,17 @@ parameters:
     type: string
     default: ansible-tower
 
-  key_name:
-    description: Nova keypair name for ssh access to the server
+  ssh_keypair_name:
+    description: |
+      Nova keypair name for ssh access to the server.  This must be a keypair
+      that has already been registered with Nova.
     type: string
 
   ansible_tower_tarball:
     description: Location of the Ansible Tower installer
     type: string
-    default: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
+    default: |
+      http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
 
   ansible_release_folder:
     description: Folder name that is extracted from the installer
@@ -82,7 +91,7 @@ resources:
   ansible_tower:
     type: "Rackspace::Cloud::Server"
     properties:
-      key_name: { get_param: key_name }
+      key_name: { get_param: ssh_keypair_name }
       flavor: { get_param: flavor }
       image: Ubuntu 12.04 LTS (Precise Pangolin)
       name: { get_param: server_name }
@@ -105,6 +114,7 @@ resources:
             # Copy everything to working directory and install
             cd %ansible_release_folder%
             ./setup.sh
+            ufw allow 443
           params:
             "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
             "%ansible_release_folder%": { get_param: ansible_release_folder }
@@ -122,3 +132,15 @@ outputs:
   private_ip:
     value: { get_attr: [ ansible_tower, privateIPv4 ] }
     description: The private IP address of the server
+
+  ansible_username:
+    value: admin
+    description: The username to use when logging into Tower
+
+  ansible_url:
+    value:
+      str_replace:
+        template: "https://%server_ip%"
+        params:
+          "%server_ip%": { get_attr: [ ansible_tower, accessIPv4 ] }
+    description: URL for accessing Tower
