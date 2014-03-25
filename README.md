@@ -5,6 +5,7 @@ This repository holds various HEAT templates for use with [OpenStack Heat](https
 
 Requirements
 ============
+
 * An OpenStack username, password, and tenant id.
 * [python-heatclient](https://github.com/openstack/python-heatclient) `>= v0.2.8`:
 
@@ -16,12 +17,13 @@ We recommend installing the client within a [Python virtual environment](http://
 
 Example Usage
 =============
+
 Here is an example of how to deploy this template using the [python-heatclient](https://github.com/openstack/python-heatclient):
 
 ```
 heat --os-username <OS-USERNAME> --os-password <OS-PASSWORD> --os-tenant-id \
 <TENANT-ID> --os-auth-url https://identity.api.rackspacecloud.com/v2.0/ \
-stack-create Minecraft-Stack -f minecraft-server.yaml \
+stack-create Stack-Name -f templatefile.template \
 -P server_hostname=MineStack -P ssh_keypair_name=mine-example
 ```
 
