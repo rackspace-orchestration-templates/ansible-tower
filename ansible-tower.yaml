@@ -42,51 +42,26 @@ parameters:
     default: |
       http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
 
-  ansible_release_folder:
-    description: Folder name that is extracted from the installer
-    type: string
-    default: ansible-tower-setup-1.4.5
+resources:
 
+  # Random password generation
   ansible_admin_pass:
-    default: password
-    hidden: true
-    description: Ansible admin password
-    type: string
-    constraints:
-    - length:
-        min: 1
-        max: 41
-      description: must be between 1 and 41 characters
-    - allowed_pattern: "[a-zA-Z0-9]*"
-      description : must contain only alphanumeric characters.
+    type: "OS::Heat::RandomString"
+    properties:
+      length: 16
+      sequence: lettersdigits
 
   postgres_admin_pass:
-    default: AWsecret
-    hidden: true
-    description: Postgres admin password
-    type: string
-    constraints:
-    - length:
-        min: 1
-        max: 41
-      description: must be between 1 and 41 characters
-    - allowed_pattern: "[a-zA-Z0-9]*"
-      description : must contain only alphanumeric characters.
+    type: "OS::Heat::RandomString"
+    properties:
+      length: 16
+      sequence: lettersdigits
 
   rabbitmq_admin_pass:
-    default: AWXbunnies
-    hidden: true
-    description: Postgres admin password
-    type: string
-    constraints:
-    - length:
-        min: 1
-        max: 41
-      description: must be between 1 and 41 characters
-    - allowed_pattern: "[a-zA-Z0-9]*"
-      description : must contain only alphanumeric characters.
-
-resources:
+    type: "OS::Heat::RandomString"
+    properties:
+      length: 16
+      sequence: lettersdigits
 
   ansible_tower:
     type: "Rackspace::Cloud::Server"
@@ -106,21 +81,20 @@ resources:
             wget -ct0 %ansible_tower_tarball%
             tar xzf ansible-tower-setup-latest.tar.gz
             # Modify groupvars
-            sed -i 's/pg_password: AWsecret/pg_password: %postgres_admin_pass%/' %ansible_release_folder%/group_vars/all
-            sed -i 's/admin_password: password/admin_password: %ansible_admin_pass%/' %ansible_release_folder%/group_vars/all
-            sed -i 's/rabbitmq_password: "AWXbunnies"/rabbitmq_password: "%rabbitmq_admin_pass%"/' %ansible_release_folder%/group_vars/all
-            sed -i 's/httpd_server_name: localhost/httpd_server_name: %server_name%/' %ansible_release_folder%/group_vars/all
-            sed -i 's/ - localhost/ - %server_name%/' %ansible_release_folder%/group_vars/all
+            sed -i 's/pg_password: AWsecret/pg_password: %postgres_admin_pass%/' ansible-tower*/group_vars/all
+            sed -i 's/admin_password: password/admin_password: %ansible_admin_pass%/' ansible-tower*/group_vars/all
+            sed -i 's/rabbitmq_password: "AWXbunnies"/rabbitmq_password: "%rabbitmq_admin_pass%"/' ansible-tower*/group_vars/all
+            sed -i 's/httpd_server_name: localhost/httpd_server_name: %server_name%/' ansible-tower*/group_vars/all
+            sed -i 's/ - localhost/ - %server_name%/' ansible-tower*/group_vars/all
             # Copy everything to working directory and install
-            cd %ansible_release_folder%
+            cd ansible-tower*
             ./setup.sh
             ufw allow 443
           params:
             "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
-            "%ansible_release_folder%": { get_param: ansible_release_folder }
-            "%ansible_admin_pass%": { get_param: ansible_admin_pass }
-            "%postgres_admin_pass%": { get_param: postgres_admin_pass }
-            "%rabbitmq_admin_pass%": { get_param: rabbitmq_admin_pass }
+            "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
+            "%postgres_admin_pass%": { get_attr: [postgres_admin_pass, value] }
+            "%rabbitmq_admin_pass%": { get_attr: [rabbitmq_admin_pass, value] }
             "%server_name%": { get_param: server_name }
 
 outputs:
@@ -137,6 +111,10 @@ outputs:
     value: admin
     description: The username to use when logging into Tower
 
+  ansible_password:
+    value: { get_attr: [ansible_admin_pass, value] }
+    description: The administrative password to use when logging into Tower
+
   ansible_url:
     value:
       str_replace:
@@ -144,3 +122,11 @@ outputs:
         params:
           "%server_ip%": { get_attr: [ ansible_tower, accessIPv4 ] }
     description: URL for accessing Tower
+
+  postgres_admin_password:
+    value: { get_attr: [postgres_admin_pass, value] }
+    description: Admin password for Postgres
+
+  rabbitmq_admin_password:
+    value: { get_attr: [rabbitmq_admin_pass, value] }
+    description: Admin password for RabbitMQ
