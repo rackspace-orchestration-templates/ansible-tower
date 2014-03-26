@@ -1,14 +1,16 @@
-heat-templates
-==============
-This repository holds various HEAT templates for use with [OpenStack
-Heat](https://wiki.openstack.org/wiki/Heat) on the [Rackspace
-Cloud](http://www.rackspace.com/cloud/).
+ansible-tower
+======================
+This template will deploy the latest version of [Ansible
+Tower](http://www.ansible.com/tower).
 
 Requirements
 ============
 * An OpenStack username, password, and tenant id.
-* [python-heatclient](https://github.com/openstack/python-heatclient)
-`>= v0.2.8`:
+* An already registered [Nova
+Keypair](http://docs.rackspace.com/servers/api/v2/cs-gettingstarted/content\
+nova_summary_serverkeypairs.html)
+* [python-heatclient](https://github.com/openstack/python-heatclient) `>=
+v0.2.8`:
 
 ```bash
 pip install python-heatclient
@@ -25,8 +27,8 @@ Here is an example of how to deploy this template using the
 ```
 heat --os-username <OS-USERNAME> --os-password <OS-PASSWORD> --os-tenant-id \
 <TENANT-ID> --os-auth-url https://identity.api.rackspacecloud.com/v2.0/ \
-stack-create Stack-Name -f templatefile.template \
--P server_name=YourServerName -P ssh_keypair_name=mine-example
+stack-create Ansible-Tower -f ansible-tower.yaml \
+-P server_name=ansible-tower -P ssh_keypair_name=ansible-key
 ```
 
 * For UK customers, use `https://lon.identity.api.rackspacecloud.com/v2.0/` as
@@ -47,17 +49,55 @@ Parameters
 Parameters can be replaced with your own values when standing up a stack. Use
 the `-P` flag to specify a custom parameter.
 
+* `server_name`: Sets the hostname of the server. (Default: ansible-tower)
+* `flavor`: Cloud server size to use. (Default: 1GB Standard Instance)
+* `ssh_keypair_name`: Name of an existing registered Nova Keypair to use.
+  (Default: none)
+* `ansible_tower_tarball`: Location of the Ansible Tower installer. (Default:
+  Latest release from Ansible.)
+* `ansible_release_folder`: Folder name that is extracted from the installer.
+  (Default: ansible-tower-setup-1.4.5)
+* `ansible_admin_pass`: Ansible admin password. (Default: password)
+* `postgres_admin_pass`: Postgres admin password. (Default: AWsecret)
+* `rabbitmq_admin_pass`: Postgres admin password. (Default: AWXbunnies)
+
 Outputs
 =======
 Once a stack comes online, use `heat output-list` to see all available outputs.
 Use `heat output-show <OUTPUT NAME>` to get the value fo a specific output.
 
+* `public_ip`: The public IP address of the server.
+* `private_ip`: The private IP address of the server.
+* `ansible_username`: Username for logging into Tower (will always be `admin`)
+* `ansible_url`: URL to use when accessing Ansible Tower
+
 For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
 can be done within a file using `%s/\\n/\r/g`.
+
+Stack Details
+=============
+This installs on a Ubuntu 12.04 server using the installer provided by
+Ansible.
 
 Contributing
 ============
 There are substantial changes still happening within the [OpenStack
 Heat](https://wiki.openstack.org/wiki/Heat) project. Template contribution
 guidelines will be drafted in the near future.
+
+License
+=======
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
