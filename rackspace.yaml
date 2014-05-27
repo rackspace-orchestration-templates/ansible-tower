@@ -4,11 +4,30 @@ application-name: Ansible Tower
 application-version: latest
 flavor: Single Linux server running Ansible Tower
 flavor-weight: 1
+reach-info:
+  tattoo: https://0b5294b243620310a700-e388a7f3aba385a925111b1fc6f680d4.ssl.cf2.rackcdn.com/ansible-tower-tattoo.png
+  icon-20x20: https://0b5294b243620310a700-e388a7f3aba385a925111b1fc6f680d4.ssl.cf2.rackcdn.com/ansible-tower-icon-20x20.png
 abstract: |
   Single Linux server running the free, 10 node version of
   [Tower](http://www.ansible.com/tower).
 
   This deployment is intended for developement and test cases.
-reach-info:
-  tattoo: https://0b5294b243620310a700-e388a7f3aba385a925111b1fc6f680d4.ssl.cf2.rackcdn.com/ansible-tower-tattoo.png
-  icon-20x20: https://0b5294b243620310a700-e388a7f3aba385a925111b1fc6f680d4.ssl.cf2.rackcdn.com/ansible-tower-icon-20x20.png
+instructions: |
+  #### Getting Started
+  If you are new to [Tower](http://www.ansible.com/tower), check out the [user
+  guide](http://releases.ansible.com/ansible-tower/docs/tower_user_guide-latest.pdf).
+  This installation of tower is limited to 10 machines. If you require support
+  for more than 10 machines, you will need to upgrade your installation.
+  Pricing details for additional support server support can be found
+  [here](http://www.ansible.com/pricing#tower).
+
+  #### Accessing your Deployment
+  To access Tower, go to the Ansible URL in your browser, and login with the
+  credentials provided as a part of this deployment.
+
+  #### Logging in via SSH
+  The private key provided in the passwords section can be used to login as
+  root via SSH.  We have an article on how to use these keys with [Mac OS X and
+  Linux](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-linuxmac)
+  as well as [Windows using
+  PuTTY](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-windows).
