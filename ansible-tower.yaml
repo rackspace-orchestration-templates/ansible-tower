@@ -10,6 +10,14 @@ parameter_groups:
   - server_name
   - flavor
 
+- label: rax-dev-params
+  # These are parameters that will not be displayed in the portal. The purpose
+  # of these parameters are for users who are developing or testing newer or
+  # different setups. If any of these parameters are changed, there is a good
+  # chance this stack will fail to properly deploy.
+  parameters:
+  - ansible_tower_tarball
+
 parameters:
 
   flavor:
