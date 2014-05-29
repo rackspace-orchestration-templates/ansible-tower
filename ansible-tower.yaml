@@ -3,6 +3,13 @@ heat_template_version: 2013-05-23
 description: |
   A template that deploys an Ansible Tower node.
 
+parameter_groups:
+
+- label: Server Settings
+  parameters:
+  - server_name
+  - flavor
+
 parameters:
 
   flavor:
@@ -30,12 +37,6 @@ parameters:
     type: string
     default: ansible-tower
 
-  ssh_keypair_name:
-    description: |
-      Nova keypair name for ssh access to the server.  This must be a keypair
-      that has already been registered with Nova.
-    type: string
-
   ansible_tower_tarball:
     description: Location of the Ansible Tower installer
     type: string
@@ -43,6 +44,12 @@ parameters:
       http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
 
 resources:
+
+  ssh_key:
+    type: "OS::Nova::KeyPair"
+    properties:
+      name: { get_param: "OS::stack_id" }
+      save_private_key: true
 
   # Random password generation
   ansible_admin_pass:
@@ -66,7 +73,7 @@ resources:
   ansible_tower:
     type: "Rackspace::Cloud::Server"
     properties:
-      key_name: { get_param: ssh_keypair_name }
+      key_name: { get_resource: ssh_key }
       flavor: { get_param: flavor }
       image: Ubuntu 12.04 LTS (Precise Pangolin)
       name: { get_param: server_name }
@@ -98,6 +105,10 @@ resources:
             "%server_name%": { get_param: server_name }
 
 outputs:
+
+  private_key:
+    description: Private Key
+    value: { get_attr: [ssh_key, private_key] }
 
   public_ip:
     value: { get_attr: [ ansible_tower, accessIPv4 ] }

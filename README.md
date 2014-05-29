@@ -51,25 +51,24 @@ the `-P` flag to specify a custom parameter.
 
 * `server_name`: Sets the hostname of the server. (Default: ansible-tower)
 * `flavor`: Cloud server size to use. (Default: 1GB Standard Instance)
-* `ssh_keypair_name`: Name of an existing registered Nova Keypair to use.
-  (Default: none)
 * `ansible_tower_tarball`: Location of the Ansible Tower installer. (Default:
   Latest release from Ansible.)
-* `ansible_release_folder`: Folder name that is extracted from the installer.
-  (Default: ansible-tower-setup-1.4.5)
-* `ansible_admin_pass`: Ansible admin password. (Default: password)
-* `postgres_admin_pass`: Postgres admin password. (Default: AWsecret)
-* `rabbitmq_admin_pass`: Postgres admin password. (Default: AWXbunnies)
 
 Outputs
 =======
 Once a stack comes online, use `heat output-list` to see all available outputs.
 Use `heat output-show <OUTPUT NAME>` to get the value fo a specific output.
 
+* `private_key`: Private key for logging in as root to your server.
 * `public_ip`: The public IP address of the server.
 * `private_ip`: The private IP address of the server.
 * `ansible_username`: Username for logging into Tower (will always be `admin`)
+* `ansible_password`: Admin password for logging into Tower.
 * `ansible_url`: URL to use when accessing Ansible Tower
+* `postgres_admin_password`: Admin password for Posgresql that's bundled with
+  Tower.  It's automatically configured with Tower.
+* `rabbitmq_admin_password`: Admin password for RabbitMQ that's bundled with
+  Tower.  It's automatically configured with Tower, you probably won't need it.
 
 For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
