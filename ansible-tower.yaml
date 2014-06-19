@@ -85,6 +85,8 @@ resources:
       flavor: { get_param: flavor }
       image: Ubuntu 12.04 LTS (Precise Pangolin)
       name: { get_param: server_name }
+      metadata:
+        rax-heat: { get_param: "OS::stack_id" }
       user_data:
         str_replace:
           template: |
