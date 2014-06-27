@@ -7,8 +7,8 @@ parameter_groups:
 
 - label: Server Settings
   parameters:
-  - server_name
   - flavor
+  - image
 
 - label: rax-dev-params
   # These are parameters that will not be displayed in the portal. The purpose
@@ -17,11 +17,15 @@ parameter_groups:
   # chance this stack will fail to properly deploy.
   parameters:
   - ansible_tower_tarball
+  - server_name
 
 parameters:
 
   flavor:
-    description: Rackspace Cloud Server flavor
+    label: Server Size
+    description: |
+      Rackspace Cloud Server flavor to use. The size is based on the amount of
+      RAM for the provisioned server.
     type: string
     default: 1 GB Performance
     constraints:
@@ -40,12 +44,25 @@ parameters:
         - 30GB Standard Instance
         description: must be a valid Rackspace Cloud Server flavor.
 
+  image:
+    label: Server Image
+    description: Operating system to use for your server.
+    type: string
+    default: Ubuntu 14.04 LTS (Trusty Tahr)
+    constraints:
+    - allowed_values:
+      - Ubuntu 12.04 LTS (Precise Pangolin)
+      - Ubuntu 14.04 LTS (Trusty Tahr)
+      description: Must be a supported operating system.
+
   server_name:
+    label: Server Hostname
     description: The instance name
     type: string
     default: ansible-tower
 
   ansible_tower_tarball:
+    label: Ansible Tarball
     description: Location of the Ansible Tower installer
     type: string
     default: |
@@ -83,14 +100,14 @@ resources:
     properties:
       key_name: { get_resource: ssh_key }
       flavor: { get_param: flavor }
-      image: Ubuntu 12.04 LTS (Precise Pangolin)
+      image: { get_param: image }
       name: { get_param: server_name }
       user_data:
         str_replace:
           template: |
             #!/bin/bash -v
             # Install dependencies
-            apt-get install python-pip wget -y
+            apt-get install python-dev python-yaml python-paramiko python-jinja2 python-pip -y
             pip install ansible
             # Pull and extract the installer
             wget -ct0 %ansible_tower_tarball%

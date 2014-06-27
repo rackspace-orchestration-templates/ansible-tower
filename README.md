@@ -51,6 +51,8 @@ the `-P` flag to specify a custom parameter.
 
 * `server_name`: Sets the hostname of the server. (Default: ansible-tower)
 * `flavor`: Cloud server size to use. (Default: 1GB Standard Instance)
+* `image`: Operating system to install (Default: Ubuntu 14.04 LTS (Trusty
+  Tahr))
 * `ansible_tower_tarball`: Location of the Ansible Tower installer. (Default:
   Latest release from Ansible.)
 
