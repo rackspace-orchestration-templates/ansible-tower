@@ -132,26 +132,9 @@ resources:
             "%server_name%": { get_param: server_name }
 
 outputs:
-
   private_key:
-    description: Private Key
+    description: SSH Private Key
     value: { get_attr: [ssh_key, private_key] }
-
-  public_ip:
-    value: { get_attr: [ ansible_tower, accessIPv4 ] }
-    description: The public IP address of the server
-
-  private_ip:
-    value: { get_attr: [ ansible_tower, privateIPv4 ] }
-    description: The private IP address of the server
-
-  ansible_username:
-    value: admin
-    description: The username to use when logging into Tower
-
-  ansible_password:
-    value: { get_attr: [ansible_admin_pass, value] }
-    description: The administrative password to use when logging into Tower
 
   ansible_url:
     value:
@@ -159,12 +142,16 @@ outputs:
         template: "https://%server_ip%"
         params:
           "%server_ip%": { get_attr: [ ansible_tower, accessIPv4 ] }
-    description: URL for accessing Tower
+    description: Tower URL
 
-  postgres_admin_password:
-    value: { get_attr: [postgres_admin_pass, value] }
-    description: Admin password for Postgres
+  public_ip:
+    value: { get_attr: [ ansible_tower, accessIPv4 ] }
+    description: Server IP
 
-  rabbitmq_admin_password:
-    value: { get_attr: [rabbitmq_admin_pass, value] }
-    description: Admin password for RabbitMQ
+  ansible_username:
+    value: admin
+    description: Admin Username
+
+  ansible_password:
+    value: { get_attr: [ansible_admin_pass, value] }
+    description: Admin Password

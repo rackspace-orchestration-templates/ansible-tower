@@ -10,8 +10,6 @@ reach-info:
 hidden_outputs:
   - private_key
   - ansible_password
-  - postgres_admin_password
-  - rabbitmq_admin_password
 abstract: |
   Single Linux server running the free, 10 node version of
   [Tower](http://www.ansible.com/tower).
