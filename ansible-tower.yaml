@@ -144,7 +144,7 @@ outputs:
           "%server_ip%": { get_attr: [ ansible_tower, accessIPv4 ] }
     description: Tower URL
 
-  public_ip:
+  server_ip:
     value: { get_attr: [ ansible_tower, accessIPv4 ] }
     description: Server IP
 

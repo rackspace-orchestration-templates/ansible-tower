@@ -6,9 +6,6 @@ Tower](http://www.ansible.com/tower).
 Requirements
 ============
 * An OpenStack username, password, and tenant id.
-* An already registered [Nova
-Keypair](http://docs.rackspace.com/servers/api/v2/cs-gettingstarted/content\
-nova_summary_serverkeypairs.html)
 * [python-heatclient](https://github.com/openstack/python-heatclient) `>=
 v0.2.8`:
 
@@ -62,15 +59,10 @@ Once a stack comes online, use `heat output-list` to see all available outputs.
 Use `heat output-show <OUTPUT NAME>` to get the value fo a specific output.
 
 * `private_key`: Private key for logging in as root to your server.
-* `public_ip`: The public IP address of the server.
-* `private_ip`: The private IP address of the server.
+* `server_ip`: The public IP address of the server.
 * `ansible_username`: Username for logging into Tower (will always be `admin`)
 * `ansible_password`: Admin password for logging into Tower.
 * `ansible_url`: URL to use when accessing Ansible Tower
-* `postgres_admin_password`: Admin password for Posgresql that's bundled with
-  Tower.  It's automatically configured with Tower.
-* `rabbitmq_admin_password`: Admin password for RabbitMQ that's bundled with
-  Tower.  It's automatically configured with Tower, you probably won't need it.
 
 For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
@@ -78,7 +70,7 @@ can be done within a file using `%s/\\n/\r/g`.
 
 Stack Details
 =============
-This installs on a Ubuntu 12.04 server using the installer provided by
+This installs on a Ubuntu 12.04 or 14.04 server using the installer provided by
 Ansible.
 
 Contributing
