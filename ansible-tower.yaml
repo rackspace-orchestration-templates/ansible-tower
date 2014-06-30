@@ -1,7 +1,7 @@
 heat_template_version: 2013-05-23
 
 description: |
-  A template that deploys an Ansible Tower node.
+  A template that deploys Ansible Tower onto a single Linux server.
 
 parameter_groups:
 
