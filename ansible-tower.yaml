@@ -45,8 +45,10 @@ parameters:
         description: must be a valid Rackspace Cloud Server flavor.
 
   image:
-    label: Server Image
-    description: Operating system to use for your server.
+    label: Operating System
+    description: |
+      Server image used for all servers that are created as a part of this
+      deployment
     type: string
     default: Ubuntu 14.04 LTS (Trusty Tahr)
     constraints:
