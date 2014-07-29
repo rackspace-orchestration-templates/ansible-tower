@@ -2,7 +2,7 @@ schema-version: 1.0.0
 application-family: Configuration Management
 application-name: Ansible Tower
 application-version: latest
-flavor: Single Linux server running Ansible Tower
+flavor: Single Linux server
 flavor-weight: 1
 reach-info:
   tattoo: https://0b5294b243620310a700-e388a7f3aba385a925111b1fc6f680d4.ssl.cf2.rackcdn.com/ansible-tower-tattoo.png
