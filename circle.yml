@@ -1,0 +1,9 @@
+machine:
+  python:
+    version: 2.7.8
+dependencies:
+  override:
+  - pip install hot
+test:
+  override:
+  - hot test
