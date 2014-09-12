@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/rackspace-orchestration-templates/ansible-tower/tree/master.png?style=shield)](https://circleci.com/gh/rackspace-orchestration-templates/ansible-tower/tree/master)
+
 ansible-tower
 ======================
 This template will deploy the latest version of [Ansible
