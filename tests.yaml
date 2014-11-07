@@ -26,7 +26,7 @@ test-cases:
   create:
     parameters:
       flavor: 2GB Standard Instance
-      image: Ubuntu 12.04 LTS (Precise Pangolin)
+      image: Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)
     timeout: 30
   resource_tests:
     ssh_private_key: { get_output: private_key }
