@@ -116,6 +116,7 @@ resources:
         str_replace:
           template: |
             #!/bin/bash -v
+            set -e
             # Install dependencies
             apt-get install python-dev python-yaml python-paramiko python-jinja2 python-pip -y
             pip install ansible
