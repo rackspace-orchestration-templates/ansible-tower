@@ -97,6 +97,12 @@ resources:
       length: 16
       sequence: lettersdigits
 
+  munin_admin_pass:
+    type: "OS::Heat::RandomString"
+    properties:
+      length: 16
+      sequence: lettersdigits
+
   ansible_tower:
     type: "Rackspace::Cloud::Server"
     properties:
@@ -120,6 +126,7 @@ resources:
             sed -i 's/pg_password: AWsecret/pg_password: %postgres_admin_pass%/' ansible-tower*/group_vars/all
             sed -i 's/admin_password: password/admin_password: %ansible_admin_pass%/' ansible-tower*/group_vars/all
             sed -i 's/rabbitmq_password: "AWXbunnies"/rabbitmq_password: "%rabbitmq_admin_pass%"/' ansible-tower*/group_vars/all
+            sed -i 's/munin_password: password/munin_password: %munin_admin_pass%/' ansible-tower*/group_vars/all
             sed -i 's/httpd_server_name: localhost/httpd_server_name: %server_name%/' ansible-tower*/group_vars/all
             sed -i 's/ - localhost/ - %server_name%/' ansible-tower*/group_vars/all
             # Copy everything to working directory and install
@@ -131,6 +138,7 @@ resources:
             "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
             "%postgres_admin_pass%": { get_attr: [postgres_admin_pass, value] }
             "%rabbitmq_admin_pass%": { get_attr: [rabbitmq_admin_pass, value] }
+            "%munin_admin_pass%": { get_attr: [munin_admin_pass, value] }
             "%server_name%": { get_param: server_name }
 
 outputs:
