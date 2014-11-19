@@ -22,26 +22,26 @@ test-cases:
             use_ssh_config: True
             fabfile: test/fabric/ansible.py # Path to envassert test
 
-- name: Standard Instance, Ubuntu 12.04
-  create:
-    parameters:
-      flavor: 2GB Standard Instance
-      image: Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)
-    timeout: 30
-  resource_tests:
-    ssh_private_key: { get_output: private_key }
-    ssh_key_file: tmp/private_key
-    tests:
-    - ansible_server:
-        fabric:
-          env:
-            user: root
-            key_filename: tmp/private_key
-            hosts: { get_output: server_ip }
-            tasks:
-              - check
-            abort_on_prompts: True
-            connection_attempts: 3
-            disable_known_hosts: True
-            use_ssh_config: True
-            fabfile: test/fabric/ansible.py
+#- name: Standard Instance, Ubuntu 12.04
+#  create:
+#    parameters:
+#      flavor: 2GB Standard Instance
+#      image: Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)
+#    timeout: 30
+#  resource_tests:
+#    ssh_private_key: { get_output: private_key }
+#    ssh_key_file: tmp/private_key
+#    tests:
+#    - ansible_server:
+#        fabric:
+#          env:
+#            user: root
+#            key_filename: tmp/private_key
+#            hosts: { get_output: server_ip }
+#            tasks:
+#              - check
+#            abort_on_prompts: True
+#            connection_attempts: 3
+#            disable_known_hosts: True
+#            use_ssh_config: True
+#            fabfile: test/fabric/ansible.py

@@ -53,7 +53,7 @@ parameters:
     default: Ubuntu 14.04 LTS (Trusty Tahr)
     constraints:
     - allowed_values:
-      - Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)
+#      - Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)
       - Ubuntu 14.04 LTS (Trusty Tahr)
       description: Must be a supported operating system.
 
