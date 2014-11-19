@@ -2,6 +2,7 @@ schema-version: 1.0.0
 application-family: Configuration Management
 application-name: Ansible Tower
 application-version: latest
+github-repository-name: ansible-tower
 flavor: Single Linux server
 flavor-weight: 1
 reach-info:
