@@ -119,7 +119,7 @@ resources:
             set -e
             # Install dependencies
             apt-get install python-dev python-yaml python-paramiko python-jinja2 python-pip -y
-            pip install ansible==1.7.2
+            pip install ansible
             # Pull and extract the installer
             wget -ct0 %ansible_tower_tarball%
             tar xzf ansible-tower-setup-latest.tar.gz
