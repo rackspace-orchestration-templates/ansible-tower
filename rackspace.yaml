@@ -15,7 +15,7 @@ abstract: |
   Single Linux server running the free, 10 node version of
   [Tower](http://www.ansible.com/tower).
 
-  This deployment is intended for developement and test cases.
+  This deployment is intended for development and test cases.
 instructions: |
   #### Getting Started
   If you are new to [Tower](http://www.ansible.com/tower), check out the [user
