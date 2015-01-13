@@ -91,7 +91,7 @@ resources:
       length: 16
       sequence: lettersdigits
 
-  rabbitmq_admin_pass:
+  redis_admin_pass:
     type: "OS::Heat::RandomString"
     properties:
       length: 16
@@ -119,26 +119,28 @@ resources:
             set -e
             # Install dependencies
             apt-get install python-dev python-yaml python-paramiko python-jinja2 python-pip -y
-            pip install ansible==1.7.2
+            pip install ansible
             # Pull and extract the installer
             wget -ct0 %ansible_tower_tarball%
             tar xzf ansible-tower-setup-latest.tar.gz
-            # Modify groupvars
-            sed -i 's/pg_password: AWsecret/pg_password: %postgres_admin_pass%/' ansible-tower*/group_vars/all
-            sed -i 's/admin_password: password/admin_password: %ansible_admin_pass%/' ansible-tower*/group_vars/all
-            sed -i 's/rabbitmq_password: "AWXbunnies"/rabbitmq_password: "%rabbitmq_admin_pass%"/' ansible-tower*/group_vars/all
-            sed -i 's/munin_password: password/munin_password: %munin_admin_pass%/' ansible-tower*/group_vars/all
-            sed -i 's/httpd_server_name: localhost/httpd_server_name: %server_name%/' ansible-tower*/group_vars/all
-            sed -i 's/ - localhost/ - %server_name%/' ansible-tower*/group_vars/all
+            # Write out options file
+            echo "admin_password: %ansible_admin_pass%
+            database: internal
+            munin_password: %munin_admin_pass%
+            pg_password: %postgres_admin_pass%
+            primary_machine: localhost
+            redis_password: %redis_admin_pass%
+            " > options.yml
             # Copy everything to working directory and install
             cd ansible-tower*
+            ./configure -o /root/options.yml
             ./setup.sh
             ufw allow 443
           params:
             "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
             "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
             "%postgres_admin_pass%": { get_attr: [postgres_admin_pass, value] }
-            "%rabbitmq_admin_pass%": { get_attr: [rabbitmq_admin_pass, value] }
+            "%redis_admin_pass%": { get_attr: [redis_admin_pass, value] }
             "%munin_admin_pass%": { get_attr: [munin_admin_pass, value] }
             "%server_name%": { get_param: server_name }
 
