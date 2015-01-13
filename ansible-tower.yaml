@@ -130,10 +130,14 @@ resources:
             munin_password: %munin_admin_pass%
             pg_password: %postgres_admin_pass%
             primary_machine: localhost
-            redis_password: %redis_admin_pass%
-            " > options.yml
+            redis_password: %redis_admin_pass%" > tower_setup_conf.yml
+            # Write out the inventory file
+            echo "[primary]
+            localhost
+
+            [all:children]
+            primary" > inventory
             # Copy everything to working directory and install
-            ./configure -o options.yml
             ./setup.sh
             ufw allow 443
           params:
