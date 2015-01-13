@@ -123,6 +123,7 @@ resources:
             # Pull and extract the installer
             wget -ct0 %ansible_tower_tarball%
             tar xzf ansible-tower-setup-latest.tar.gz
+            cd ansible-tower*
             # Write out options file
             echo "admin_password: %ansible_admin_pass%
             database: internal
@@ -132,8 +133,7 @@ resources:
             redis_password: %redis_admin_pass%
             " > options.yml
             # Copy everything to working directory and install
-            cd ansible-tower*
-            ./configure -o /root/options.yml
+            ./configure -o options.yml
             ./setup.sh
             ufw allow 443
           params:
