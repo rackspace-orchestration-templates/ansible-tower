@@ -50,11 +50,11 @@ parameters:
       Server image used for all servers that are created as a part of this
       deployment
     type: string
-    default: Ubuntu 14.04 LTS (Trusty Tahr)
+    default: Ubuntu 14.04 LTS (Trusty Tahr) (PV)
     constraints:
     - allowed_values:
       - Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)
-      - Ubuntu 14.04 LTS (Trusty Tahr)
+      - Ubuntu 14.04 LTS (Trusty Tahr) (PV)
       description: Must be a supported operating system.
 
   server_name:
