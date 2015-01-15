@@ -53,12 +53,12 @@ the `-P` flag to specify a custom parameter.
 * `flavor`: Rackspace Cloud Server flavor to use. The size is based on the amount of
 RAM for the provisioned server.
  (Default: 1 GB General Purpose v1)
-* `ansible_tower_tarball`: Location of the Ansible Tower installer (Default: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
-)
 * `image`: Server image used for all servers that are created as a part of this
 deployment
  (Default: Ubuntu 14.04 LTS (Trusty Tahr))
 * `server_name`: The instance name (Default: ansible-tower)
+* `ansible_tower_tarball`: Location of the Ansible Tower installer (Default: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
+)
 
 Outputs
 =======
@@ -66,10 +66,10 @@ Once a stack comes online, use `heat output-list` to see all available outputs.
 Use `heat output-show <OUTPUT NAME>` to get the value of a specific output.
 
 * `private_key`: SSH Private Key 
-* `ansible_password`: Admin Password 
 * `ansible_url`: Tower URL 
 * `server_ip`: Server IP 
 * `ansible_username`: Admin Username 
+* `ansible_password`: Admin Password 
 
 For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
