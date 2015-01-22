@@ -13,4 +13,4 @@ deployment:
   stable:
     branch: master
     commands:
-    - bumper bump $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME
+    - bumper bump --flush-fusion-cache $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME
