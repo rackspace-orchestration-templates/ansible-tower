@@ -3,9 +3,7 @@ machine:
     version: 2.7.8
 dependencies:
   override:
-  - pip install hot
-  - pip install git+https://github.com/JasonBoyles/envshuffle
-  - pip install git+https://github.com/JasonBoyles/bumper
+  - pip install -r requirements.txt
 test:
   override:
   - envshuffle hot test

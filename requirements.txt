@@ -1,0 +1,3 @@
+hot
+git+https://github.com/JasonBoyles/envshuffle
+git+https://github.com/JasonBoyles/bumper
