@@ -1,4 +1,5 @@
-from fabric.api import env, run, task
+import os
+from fabric.api import env, run, task, get
 from envassert import detect, file, group, package, port, process, service, \
     user
 
@@ -22,3 +23,25 @@ def check():
     assert service.is_enabled("postgres"), "service postgres is not enable"
     assert service.is_enabled("redis-server"), "service redis-server is not enabled"
     assert service.is_enabled("supervisor"), "service supervisor is not enabled"
+
+
+@task
+def artifacts():
+    env.platform_family = detect.detect()
+
+    # Logs to pull
+    logs = ['/root/cfn-userdata.log',
+            '/root/heat-script.log']
+
+    # Artifacts target location
+    try:
+        os.environ['CIRCLE_ARTIFACTS']
+    except:
+        artifacts = 'tmp'
+    else:
+        artifacts = os.environ['CIRCLE_ARTIFACTS']
+
+    # For each log, get it down
+    for log in logs:
+        target = artifacts + "/%(host)s/%(path)s"
+        get(log, target)
