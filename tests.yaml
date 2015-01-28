@@ -15,6 +15,7 @@ test-cases:
             key_filename: tmp/private_key
             hosts: { get_output: server_ip } # Fetch from output-list of stack
             tasks:
+              - artifacts
               - check
             abort_on_prompts: True
             connection_attempts: 3
@@ -39,6 +40,7 @@ test-cases:
             key_filename: tmp/private_key
             hosts: { get_output: server_ip }
             tasks:
+              - artifacts
               - check
             abort_on_prompts: True
             connection_attempts: 3
