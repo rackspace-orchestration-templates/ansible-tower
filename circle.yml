@@ -6,7 +6,8 @@ dependencies:
   - pip install -r requirements.txt
 test:
   override:
-  - envshuffle hot test
+  - envshuffle hot test --ci-parallel:
+      parallel: true
 deployment:
   stable:
     branch: master
