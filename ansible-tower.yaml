@@ -1,4 +1,4 @@
-heat_template_version: 2013-05-23
+heat_template_version: 2014-10-16
 
 description: |
   A template that deploys Ansible Tower onto a single Linux server.
@@ -12,7 +12,7 @@ parameter_groups:
 
 - label: rax-dev-params
   # These are parameters that will not be displayed in the portal. The purpose
-  # of these parameters are for users who are developing or testing newer or
+  # of these parameters is for users who are developing or testing newer or
   # different setups. If any of these parameters are changed, there is a good
   # chance this stack will fail to properly deploy.
   parameters:
@@ -42,7 +42,7 @@ parameters:
         - 8GB Standard Instance
         - 15GB Standard Instance
         - 30GB Standard Instance
-        description: must be a valid Rackspace Cloud Server flavor.
+        description: must be a valid Nova Cloud Server flavor.
 
   image:
     label: Operating System
@@ -71,6 +71,15 @@ parameters:
       http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
 
 resources:
+
+  wait_condition:
+    type: OS::Heat::SwiftSignal
+    properties:
+      handle: { get_resource: wait_condition_handle }
+      timeout: 1800
+
+  wait_condition_handle:
+    type: OS::Heat::SwiftSignalHandle
 
   ssh_key:
     type: "OS::Nova::KeyPair"
@@ -104,8 +113,10 @@ resources:
       sequence: lettersdigits
 
   ansible_tower:
-    type: "Rackspace::Cloud::Server"
+    type: "OS::Nova::Server"
     properties:
+      config_drive: "true"     # required for wait_condition
+      user_data_format: RAW    # required for wait_condition
       key_name: { get_resource: ssh_key }
       flavor: { get_param: flavor }
       image: { get_param: image }
@@ -118,6 +129,7 @@ resources:
             #!/bin/bash -v
             set -e
             # Install dependencies
+            apt-get update
             apt-get install python-dev python-yaml python-paramiko python-jinja2 python-pip -y
             pip install ansible
             # Pull and extract the installer
@@ -140,6 +152,7 @@ resources:
             # Copy everything to working directory and install
             ./setup.sh
             ufw allow 443
+            wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
             "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
@@ -147,6 +160,7 @@ resources:
             "%redis_admin_pass%": { get_attr: [redis_admin_pass, value] }
             "%munin_admin_pass%": { get_attr: [munin_admin_pass, value] }
             "%server_name%": { get_param: server_name }
+            wc_notify: { get_attr: ['wait_condition_handle', 'curl_cli'] }
 
 outputs:
   private_key:
@@ -172,3 +186,7 @@ outputs:
   ansible_password:
     value: { get_attr: [ansible_admin_pass, value] }
     description: Admin Password
+
+  server_data:
+    value: { get_attr: [ wait_condition, data ] }
+    description: Data from wait condition to report script status
