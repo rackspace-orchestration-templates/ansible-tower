@@ -24,8 +24,7 @@ parameters:
   flavor:
     label: Server Size
     description: |
-      Rackspace Cloud Server flavor to use. The size is based on the amount of
-      RAM for the provisioned server.
+      The size is based on the amount of RAM for the provisioned server.
     type: string
     default: 1 GB General Purpose v1
     constraints:
