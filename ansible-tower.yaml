@@ -166,8 +166,8 @@ resources:
                   # Get the extracted folder name
                   ANSIBLE_SETUP_FOLDER=`tar tf ansible-tower-setup-latest.tar.gz | awk -F/ '{ print $1 }' | uniq`
                   # Copy everything to working directory and install
-                  cp -f /root/inventory /root/$ANSIBLE_SETUP_FOLDER/inventory
-                  cp -f /root/tower_setup_conf.yml /root/$ANSIBLE_SETUP_FOLDER/tower_setup_conf.yml
+                  cp /root/inventory /root/$ANSIBLE_SETUP_FOLDER/inventory
+                  cp /root/tower_setup_conf.yml /root/$ANSIBLE_SETUP_FOLDER/tower_setup_conf.yml
                   cd $ANSIBLE_SETUP_FOLDER
                   ./setup.sh
                   ufw allow 443
