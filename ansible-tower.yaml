@@ -114,44 +114,62 @@ resources:
   ansible_tower:
     type: "OS::Nova::Server"
     properties:
-      config_drive: "true"     # required for wait_condition
-      user_data_format: RAW    # required for wait_condition
       key_name: { get_resource: ssh_key }
       flavor: { get_param: flavor }
       image: { get_param: image }
       name: { get_param: server_name }
       metadata:
         rax-heat: { get_param: "OS::stack_id" }
+      config_drive: "true"
+      user_data_format: RAW
       user_data:
         str_replace:
           template: |
-            #!/bin/bash -v
-            set -e
-            # Install dependencies
-            apt-get update
-            apt-get install python-dev python-yaml python-paramiko python-jinja2 python-pip -y
-            pip install ansible
-            # Pull and extract the installer
-            wget -ct0 %ansible_tower_tarball%
-            tar xzf ansible-tower-setup-latest.tar.gz
-            cd ansible-tower*
+            #cloud-config
+            package_update: true
+            packages:
+              - python-dev
+              - python-yaml
+              - python-paramiko
+              - python-jinja2
+              - python-pip
+            write_files:
             # Write out options file
-            echo "admin_password: %ansible_admin_pass%
-            database: internal
-            munin_password: %munin_admin_pass%
-            pg_password: %postgres_admin_pass%
-            primary_machine: localhost
-            redis_password: %redis_admin_pass%" > tower_setup_conf.yml
+              - path: /root/tower_setup_conf.yml
+                permissions: '0644'
+                content: |
+                  admin_password: %ansible_admin_pass%
+                  database: internal
+                  munin_password: %munin_admin_pass%
+                  pg_password: %postgres_admin_pass%
+                  primary_machine: localhost
+                  redis_password: %redis_admin_pass%
             # Write out the inventory file
-            echo "[primary]
-            localhost
+              - path: /root/inventory
+                permissions: '0644'
+                content: |
+                  [primary]
+                  localhost
 
-            [all:children]
-            primary" > inventory
-            # Copy everything to working directory and install
-            ./setup.sh
-            ufw allow 443
-            wc_notify --data-binary '{"status": "SUCCESS"}'
+                  [all:children]
+                  primary"
+            # Install Script
+              - path: /root/tower_install.sh
+                permissions: '0544'
+                content: |
+                  #!/bin/bash -v
+                  set -e
+                  pip install ansible
+                  # Pull and extract the installer
+                  wget -ct0 %ansible_tower_tarball%
+                  tar xzf ansible-tower-setup-latest.tar.gz
+                  cd ansible-tower*
+                  # Copy everything to working directory and install
+                  ./setup.sh
+                  ufw allow 443
+                  wc_notify --data-binary '{"status": "SUCCESS"}'
+            runcmd:
+              - /root/tower_install.sh
           params:
             "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
             "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
