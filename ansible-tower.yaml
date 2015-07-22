@@ -26,16 +26,14 @@ parameters:
     description: |
       The size is based on the amount of RAM for the provisioned server.
     type: string
-    default: 1 GB General Purpose v1
+    default: 2 GB General Purpose v1
     constraints:
       - allowed_values:
-        - 1 GB General Purpose v1
         - 2 GB General Purpose v1
         - 4 GB General Purpose v1
         - 8 GB General Purpose v1
         - 15 GB I/O v1
         - 30 GB I/O v1
-        - 1GB Standard Instance
         - 2GB Standard Instance
         - 4GB Standard Instance
         - 8GB Standard Instance
