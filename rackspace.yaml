@@ -35,3 +35,7 @@ instructions: |
   Linux](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-linuxmac)
   as well as [Windows using
   PuTTY](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-windows).
+description: |
+  Single Linux server running the free, 10 node version of
+  [Tower](http://www.ansible.com/tower).  This deployment is intended for
+  development and test cases.
