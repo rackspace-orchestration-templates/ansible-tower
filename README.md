@@ -1,4 +1,4 @@
-[![Circle CI](https://circleci.com/gh/rackspace-orchestration-templates/ansible-tower.png?style=badge)](https://circleci.com/gh/rackspace-orchestration-templates/ansible-tower)
+[![Circle CI](https://circleci.com/gh/rackspace-orchestration-templates/ansible-tower/tree/master.png?style=shield)](https://circleci.com/gh/rackspace-orchestration-templates/ansible-tower)
 Description
 ===========
 
@@ -66,12 +66,12 @@ Outputs
 Once a stack comes online, use `heat output-list` to see all available outputs.
 Use `heat output-show <OUTPUT NAME>` to get the value of a specific output.
 
-* `private_key`: SSH Private Key 
-* `ansible_url`: Tower URL 
-* `server_ip`: Server IP 
-* `ansible_username`: Admin Username 
-* `ansible_password`: Admin Password 
-* `server_data`: Data from wait condition to report script status 
+* `private_key`: SSH Private Key
+* `ansible_url`: Tower URL
+* `server_ip`: Server IP
+* `ansible_username`: Admin Username
+* `ansible_password`: Admin Password
+* `server_data`: Data from wait condition to report script status
 
 For multi-line values, the response will come in an escaped form. To get rid of
 the escapes, use `echo -e '<STRING>' > file.txt`. For vim users, a substitution
