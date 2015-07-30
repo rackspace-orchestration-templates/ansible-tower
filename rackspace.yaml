@@ -12,10 +12,8 @@ hidden_outputs:
   - private_key
   - ansible_password
 abstract: |
-  Single Linux server running the free, 10 node version of
-  [Tower](http://www.ansible.com/tower).
-
-  This deployment is intended for development and test cases.
+  Ansible Tower is a dashboard that provides visual access to different Ansible
+  tasks across your hosts, such as job scheduling and access control.
 instructions: |
   #### Getting Started
   If you are new to [Tower](http://www.ansible.com/tower), check out the [user
