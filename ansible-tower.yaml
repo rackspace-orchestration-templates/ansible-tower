@@ -1,7 +1,9 @@
 heat_template_version: 2014-10-16
 
 description: |
-  A template that deploys Ansible Tower onto a single Linux server.
+  Single Linux server running the free, 10 node version of
+  [Tower](http://www.ansible.com/tower).  This deployment is intended for
+  development and test cases.
 
 parameter_groups:
 
