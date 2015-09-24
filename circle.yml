@@ -8,8 +8,3 @@ test:
   override:
   - envshuffle hot test --ci-parallel:
       parallel: true
-deployment:
-  stable:
-    branch: master
-    commands:
-    - bumper bump --flush-fusion-cache $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME
