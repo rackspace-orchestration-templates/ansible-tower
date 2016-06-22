@@ -49,10 +49,10 @@ parameters:
       Server image used for all servers that are created as a part of this
       deployment
     type: string
-    default: Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM)
+    default: Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM) (Orchestration)
     constraints:
     - allowed_values:
-      - Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM)
+      - Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM) (Orchestration)
       description: Must be a supported operating system.
 
   server_name:
