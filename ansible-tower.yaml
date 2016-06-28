@@ -70,15 +70,6 @@ parameters:
 
 resources:
 
-  wait_condition:
-    type: OS::Heat::SwiftSignal
-    properties:
-      handle: { get_resource: wait_condition_handle }
-      timeout: 1800
-
-  wait_condition_handle:
-    type: OS::Heat::SwiftSignalHandle
-
   ssh_key:
     type: "OS::Nova::KeyPair"
     properties:
@@ -110,6 +101,69 @@ resources:
       length: 16
       sequence: lettersdigits
 
+  upload_role_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: script
+      outputs:
+      - name: results
+      config:
+        str_replace:
+          template: |
+            #!/bin/bash
+            set -e
+            apt-get install -y python-dev python-yaml python-paramiko python-jinja2 python-pip
+            cat > /root/tower_setup_conf <<'EOF'
+              admin_password: %ansible_admin_pass%
+              database: internal
+              munin_password: %munin_admin_pass%
+              pg_password: %postgres_admin_pass%
+              primary_machine: localhost
+              redis_password: %redis_admin_pass%
+              EOF
+            cat > /root/inventory <<'EOF'
+              [primary]
+              localhost
+
+              [all:children]
+              primary
+              EOF
+            cat > /root/tower_install.sh <<'EOF'
+              #!/bin/bash -v
+              set -e
+              pip install ansible
+              # Pull and extract the installer
+              cd /root
+              wget -ct0 %ansible_tower_tarball%
+              tar xzf ansible-tower-setup-latest.tar.gz
+              # Get the extracted folder name
+              ANSIBLE_SETUP_FOLDER=`tar tf ansible-tower-setup-latest.tar.gz | awk -F/ '{ print $1 }' | uniq`
+              # Copy everything to working directory and install
+              cp inventory $ANSIBLE_SETUP_FOLDER/inventory
+              cp tower_setup_conf.yml $ANSIBLE_SETUP_FOLDER/tower_setup_conf.yml
+              cd $ANSIBLE_SETUP_FOLDER
+              ./setup.sh
+              ufw allow 443
+              EOF
+            chmod +x /root/tower_install.sh
+            /root/tower_install.sh
+          params:
+            "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
+            "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
+            "%postgres_admin_pass%": { get_attr: [postgres_admin_pass, value] }
+            "%redis_admin_pass%": { get_attr: [redis_admin_pass, value] }
+            "%munin_admin_pass%": { get_attr: [munin_admin_pass, value] }
+            "%server_name%": { get_param: server_name }
+
+  deploy_roles:
+    type: OS::Heat::SoftwareDeployment
+    properties:
+      signal_transport: TEMP_URL_SIGNAL
+      config:
+        get_resource: upload_role_config
+      server:
+        get_resource: ansible_tower
+
   ansible_tower:
     type: "OS::Nova::Server"
     properties:
@@ -120,68 +174,7 @@ resources:
       metadata:
         rax-heat: { get_param: "OS::stack_id" }
       config_drive: "true"
-      user_data_format: RAW
-      user_data:
-        str_replace:
-          template: |
-            #cloud-config
-            package_update: true
-            packages:
-              - python-dev
-              - python-yaml
-              - python-paramiko
-              - python-jinja2
-              - python-pip
-            write_files:
-            # Write out options file
-              - path: /root/tower_setup_conf.yml
-                permissions: '0644'
-                content: |
-                  admin_password: %ansible_admin_pass%
-                  database: internal
-                  munin_password: %munin_admin_pass%
-                  pg_password: %postgres_admin_pass%
-                  primary_machine: localhost
-                  redis_password: %redis_admin_pass%
-            # Write out the inventory file
-              - path: /root/inventory
-                permissions: '0644'
-                content: |
-                  [primary]
-                  localhost
-
-                  [all:children]
-                  primary
-            # Install Script
-              - path: /root/tower_install.sh
-                permissions: '0544'
-                content: |
-                  #!/bin/bash -v
-                  set -e
-                  pip install ansible
-                  # Pull and extract the installer
-                  cd /root
-                  wget -ct0 %ansible_tower_tarball%
-                  tar xzf ansible-tower-setup-latest.tar.gz
-                  # Get the extracted folder name
-                  ANSIBLE_SETUP_FOLDER=`tar tf ansible-tower-setup-latest.tar.gz | awk -F/ '{ print $1 }' | uniq`
-                  # Copy everything to working directory and install
-                  cp inventory $ANSIBLE_SETUP_FOLDER/inventory
-                  cp tower_setup_conf.yml $ANSIBLE_SETUP_FOLDER/tower_setup_conf.yml
-                  cd $ANSIBLE_SETUP_FOLDER
-                  ./setup.sh
-                  ufw allow 443
-                  wc_notify --data-binary '{"status": "SUCCESS"}'
-            runcmd:
-              - /root/tower_install.sh
-          params:
-            "%ansible_tower_tarball%": { get_param: ansible_tower_tarball }
-            "%ansible_admin_pass%": { get_attr: [ansible_admin_pass, value] }
-            "%postgres_admin_pass%": { get_attr: [postgres_admin_pass, value] }
-            "%redis_admin_pass%": { get_attr: [redis_admin_pass, value] }
-            "%munin_admin_pass%": { get_attr: [munin_admin_pass, value] }
-            "%server_name%": { get_param: server_name }
-            wc_notify: { get_attr: ['wait_condition_handle', 'curl_cli'] }
+      user_data_format: SOFTWARE_CONFIG
 
 outputs:
   private_key:
@@ -207,7 +200,3 @@ outputs:
   ansible_password:
     value: { get_attr: [ansible_admin_pass, value] }
     description: Admin Password
-
-  server_data:
-    value: { get_attr: [ wait_condition, data ] }
-    description: Data from wait condition to report script status
