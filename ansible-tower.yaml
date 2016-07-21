@@ -112,7 +112,8 @@ resources:
           template: |
             #!/bin/bash
             set -e
-            apt-get install -y python-dev python-yaml python-paramiko python-jinja2 python-pip
+            apt-get install -y python-dev python-yaml python-jinja2 python-pip
+            pip install paramiko
             cat > /root/tower_setup_conf <<'EOF'
               admin_password: %ansible_admin_pass%
               database: internal
