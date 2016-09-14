@@ -114,27 +114,38 @@ resources:
             set -e
             apt-get install -y python-dev python-yaml python-jinja2 python-pip
             pip install paramiko
-            cat > /root/tower_setup_conf <<'EOF'
+            cat > /root/tower_setup_conf.yml <<'EOF'
               admin_password: %ansible_admin_pass%
               database: internal
               munin_password: %munin_admin_pass%
               pg_password: %postgres_admin_pass%
               primary_machine: localhost
               redis_password: %redis_admin_pass%
-              EOF
+            EOF
             cat > /root/inventory <<'EOF'
               [primary]
-              localhost
+              localhost ansible_connection=local
 
+              [all:vars]
+              admin_password='%ansible_admin_pass%'
+              redis_password='%redis_admin_pass%'
+              pg_password='%postgres_admin_pass%'
+              pg_host=''
+              pg_port=''
+              pg_database='awx'
+              pg_username='awx'
+              
               [all:children]
               primary
-              EOF
+            EOF
             cat > /root/tower_install.sh <<'EOF'
               #!/bin/bash -v
               set -e
               pip install ansible
               # Pull and extract the installer
               cd /root
+              ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+              cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
               wget -ct0 %ansible_tower_tarball%
               tar xzf ansible-tower-setup-latest.tar.gz
               # Get the extracted folder name
@@ -143,9 +154,9 @@ resources:
               cp inventory $ANSIBLE_SETUP_FOLDER/inventory
               cp tower_setup_conf.yml $ANSIBLE_SETUP_FOLDER/tower_setup_conf.yml
               cd $ANSIBLE_SETUP_FOLDER
-              ./setup.sh
+              sudo ./setup.sh
               ufw allow 443
-              EOF
+            EOF
             chmod +x /root/tower_install.sh
             /root/tower_install.sh
           params:
